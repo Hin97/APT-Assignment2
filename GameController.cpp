@@ -1,16 +1,37 @@
-ï»¿#include "GameController.h"
+#include "GameController.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <random>
 
+#define STATUS_OK			0
+#define STATUS_INVALID		1
+#define STATUS_CONTINE		2
+#define STATUS_QUIT			3
+#define STATUS_TERMINATE	4
+
 Game::Game()
+	: m_nRows(6)
+	, m_nCols(6)
+	, m_nCurrentPlayer(0)
 {
+	for (int i = 0; i < m_nRows; i++)
+	{
+		std::vector<Tile> row;
+		for (int j = 0; j < m_nCols; j++)
+		{
+			Tile tile; tile.colour = 0; tile.shape = 0;
+			row.push_back(tile);
+		}
+		m_board.push_back(row);
+	}
 }
+
 
 Game::~Game()
 {
 }
+
 
 void Game::Start()
 {
@@ -21,12 +42,14 @@ void Game::Start()
 		if (select == 1)
 		{
 			NewGame();
+			RunGame();
 			select = 0;
 		}
 		else if (select == 2)
 		{
 			if (LoadGame())
 			{
+				RunGame();
 				select = 0;
 			}
 			else
@@ -48,6 +71,17 @@ void Game::Start()
 }
 
 
+void Game::RunGame()
+{
+	int status = STATUS_OK;
+	while (status == STATUS_OK)
+	{
+		status = Round();
+	}
+	if (status == STATUS_TERMINATE) EndGame();
+	Quit();
+}
+
 
 void Game::PrintWelcome()
 {
@@ -58,7 +92,7 @@ void Game::PrintWelcome()
 std::string Game::UserPrompt()
 {
 	std::cout << "> ";
-	std::string str;
+	std::string str; 
 	std::getline(std::cin, str);
 	std::cout << std::endl;
 	return str;
@@ -114,9 +148,14 @@ void Game::NewGame()
 		}
 		m_players.push_back(player);
 	}
-
+	std::cout << "\nLet¡¯s Play!\n" << std::endl;
+	Shuffle();
+	for (int i = 0; i < 2; i++)
+	{
+		m_players[i].ClearHand();
+		m_players[i].Drawn(&m_bag, 6);
 	}
-
+}
 
 
 bool Game::LoadGame()
@@ -126,8 +165,7 @@ bool Game::LoadGame()
 
 	file.erase(0, file.find_first_not_of(" "));
 	file.erase(file.find_last_not_of(" ") + 1);
-	std::ifstream is;
-	is.open(file);
+	std::ifstream is; is.open(file);
 	if (!is)
 	{
 		std::cout << "Can not load the game!\n" << std::endl;
@@ -135,6 +173,54 @@ bool Game::LoadGame()
 	}
 	else
 	{
+		std::string line;
+		m_players.clear();
+		for (int i = 0; i < 2; i++)
+		{
+			Player player; m_players.push_back(player);
+		}
+		for (int i = 0; i < 2; i++)
+		{
+			std::getline(is, m_players[i].name);
+			std::getline(is, line); m_players[i].score = atoi(line.c_str());
+			std::string strHand; std::getline(is, strHand);
+			size_t left = 0;
+			while (left < strHand.length())
+			{
+				std::string strTile = strHand.substr(left, 2);
+				m_players[i].hand.AddTail(strTile[0], strTile[1] - '0');
+				left += 3;
+			}
+		}
+		std::getline(is, line); std::getline(is, line); 
+		for (int i = 0; i < m_nRows; i++)
+		{
+			std::getline(is, line);
+			size_t index = line.find("|");
+			int j = 0;
+			while (index + 2 < line.length())
+			{
+				if (line[index + 1] != ' ')
+				{
+					m_board[i][j].colour = line[index + 1];
+					m_board[i][j].shape = line[index + 2] - '0';
+				}
+				j++; index += 3;
+			}
+		}
+		std::getline(is, line);
+		size_t index = 0;
+		while (index < line.length())
+		{
+			m_bag.AddTail(line[index], line[index + 1] - '0');
+			index += 3;
+		}
+		std::getline(is, line);
+		for (size_t i = 0; i < m_players.size(); i++)
+		{
+			if (m_players[i].name.compare(line) == 0)
+				m_nCurrentPlayer = i;
+		}
 		std::cout << "Qwirkle game successfully loaded\n" << std::endl;
 		return true;
 	}
@@ -169,4 +255,251 @@ void Game::ShowStudentInfo()
 void Game::Quit()
 {
 	std::cout << "Goodbye" << std::endl;
+}
+
+
+int Game::Round()
+{
+	while (m_nCurrentPlayer < m_players.size())
+	{
+		Player &p = m_players[m_nCurrentPlayer];
+		std::cout << p.name << ", it¡¯s your turn" << std::endl;
+		PrintScores();
+		PrintBoard();
+		std::cout << "Your hand is" << std::endl;
+		p.hand.PrintContent();
+		std::cout << std::endl;
+
+		int status = STATUS_INVALID;
+		while (status != STATUS_OK)
+		{
+			std::string cmd = UserPrompt();
+			status = ParseCmd(cmd, p);
+			if (status == STATUS_QUIT || status == STATUS_TERMINATE) return status;
+			if (status == STATUS_INVALID) PrintInvalid();
+		}
+		m_nCurrentPlayer++;
+	}
+	m_nCurrentPlayer = 0;
+	return STATUS_OK;
+}
+
+
+void Game::PrintScores()
+{
+	for (size_t i = 0; i < m_players.size(); i++)
+	{
+		std::cout << "Score for " << m_players[i].name << ": " << m_players[i].score << std::endl;
+	}
+}
+
+
+void Game::PrintBoard()
+{
+	std::cout << "   ";
+	for (size_t i = 0; i < m_board.size(); i++)
+	{
+		std::cout << i << "  ";
+	}
+	std::cout << std::endl;
+	for (size_t i = 0; i < m_board.size() + 1; i++)
+	{
+		std::cout << "---";
+	}
+	std::cout << std::endl;
+	for (size_t i = 0; i < m_board.size(); i++)
+	{
+		char c = 'A' + short(i);
+		std::cout << c << " |";
+		for (auto t : m_board[i])
+		{
+			if (t.colour)
+			{
+				std::cout << t.colour << t.shape << "|";
+			}
+			else
+			{
+				std::cout << "  |";
+			}
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+
+void Game::SaveBoard(std::ofstream &os)
+{
+	os << "   ";
+	for (size_t i = 0; i < m_board.size(); i++)
+	{
+		os << i << "  ";
+	}
+	os << std::endl;
+	for (size_t i = 0; i < m_board.size() + 1; i++)
+	{
+		os << "---";
+	}
+	os << std::endl;
+	for (size_t i = 0; i < m_board.size(); i++)
+	{
+		char c = 'A' + short(i);
+		os << c << " |";
+		for (auto t : m_board[i])
+		{
+			if (t.colour)
+			{
+				os << t.colour << t.shape << "|";
+			}
+			else
+			{
+				os << "  |";
+			}
+		}
+		os << std::endl;
+	}
+}
+
+
+void Game::Shuffle()
+{
+	char colour[6] = { 'R' ,'O' ,'Y' ,'G' ,'B' ,'P' };
+	std::vector<Tile> pool;
+	for (int i = 0; i < 6; i++)
+	{
+		for (int j = 0; j < 6; j++)
+		{
+			Tile tile; 
+			tile.colour = colour[i];
+			tile.shape = j + 1;
+			pool.push_back(tile);
+			pool.push_back(tile);
+		}
+	}
+	m_bag.Clear();
+	std::default_random_engine e;//¶¨ÒåËæ»úÊýÒýÇæ
+	std::uniform_int_distribution<unsigned> id(0, 71);//ÕûÐÍ·Ö²¼
+	std::random_device device;
+	e.seed(device());
+	while (!pool.empty())
+	{
+		int index = id(e) % pool.size();
+		Tile t = pool[index];
+		m_bag.AddTail(t.colour, t.shape);
+		pool.erase(pool.begin() + index);
+	}
+}
+
+
+void Game::EndGame()
+{
+	std::string winner;
+	int max = 0;
+	std::cout << "Game over" << std::endl;
+	for (size_t i = 0; i < m_players.size(); i++)
+	{
+		if (max < m_players[i].score)
+		{
+			winner = m_players[i].name;
+			max = m_players[i].score;
+		}
+		std::cout << "Score for " << m_players[i].name << ": " << m_players[i].score << std::endl;
+	}
+	std::cout << "Player " << winner << "won!\n" << std::endl;
+}
+
+
+int Game::ParseCmd(std::string cmd, Player &player)
+{
+	if (cmd.compare("^D") == 0 || cmd.compare("\x4") == 0) return STATUS_QUIT;
+	int index = cmd.find(' ');
+	if (cmd.find("place ") == 0)
+	{
+		int c = cmd.find("at");
+		if (c == -1) return STATUS_INVALID;
+		std::string strTile = cmd.substr(index + 1, c - index - 2);
+		std::string strPlace = cmd.substr(c + 3, cmd.length() - c - 3);
+		Tile tile; if (!ParseTile(strTile, tile)) return STATUS_INVALID;
+		int row, col; if (!ParsePlace(strPlace, row, col)) return STATUS_INVALID;
+		return PlaceTile(player, tile, row, col);
+	}
+	else if (cmd.find("replace ") == 0)
+	{
+		std::string strTile = cmd.substr(index + 1, cmd.length() - index);
+		Tile tile; if (!ParseTile(strTile, tile)) return STATUS_INVALID;
+		return ReplaceTile(player, tile);
+	}
+	else if (cmd.find("save ") == 0)
+	{
+		std::string fileName = cmd.substr(index + 1, cmd.length() - index);
+		fileName.erase(0, fileName.find_first_not_of(" "));
+		fileName.erase(fileName.find_last_not_of(" ") + 1);
+		std::ofstream os; os.open(fileName);
+		if (!os) return STATUS_INVALID;
+		for (size_t i = 0; i < m_players.size(); i++)
+		{
+			os << m_players[i].name << std::endl;
+			os << m_players[i].score << std::endl;
+			m_players[i].hand.SaveContent(os);
+		}
+		SaveBoard(os);
+		m_bag.SaveContent(os);
+		os << player.name << std::endl;
+		os.close();
+		std::cout << "Game successfully saved\n" << std::endl;
+		return STATUS_CONTINE;
+	}
+	return STATUS_INVALID;
+}
+
+
+bool Game::ParseTile(std::string strTile, Tile& tile)
+{
+	if (strTile.size() != 2) return false;
+	Colour c = strTile[0];
+	if (c != 'R'&&c != 'O'&&c != 'Y'&&c != 'G'&&c != 'B'&&c != 'P') return false;
+	int shape = strTile[1] - '0';
+	if (shape < 1 || shape>6) return false;
+	tile.colour = c;
+	tile.shape = shape;
+	return true;
+}
+
+
+bool Game::ParsePlace(std::string strPlace, int& row, int& col)
+{
+	if (strPlace.size() != 2) return false;
+	row = strPlace[0] - 'A';
+	if (row < 0 || row>m_nRows) return false;
+	col= strPlace[1] - '0';
+	if (col < 0 || col>m_nCols) return false;
+	return true;
+}
+
+
+int Game::PlaceTile(Player& player, Tile& tile, int row, int col)
+{
+	if (m_board[row][col].colour != 0) return STATUS_INVALID;
+	if (!player.Discard(tile.colour, tile.shape)) return STATUS_INVALID;
+	else
+	{
+		m_board[row][col].colour = tile.colour;
+		m_board[row][col].shape = tile.shape;
+		player.Drawn(&m_bag, 1);
+		if (player.hand.size() == 0) return STATUS_TERMINATE;
+		return STATUS_OK;
+	}
+}
+
+
+int Game::ReplaceTile(Player & player, Tile & tile)
+{
+	if (m_bag.size() == 0) return STATUS_INVALID;
+	else
+	{
+		Node * node = player.hand.Extract(tile.colour, tile.shape);
+		m_bag.AddTail(node);
+		player.Drawn(&m_bag, 1);
+		return STATUS_OK;
+	}
 }

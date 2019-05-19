@@ -1,4 +1,4 @@
-ï»¿
+
 #ifndef ASSIGN2_GAME_H
 #define ASSIGN2_GAME_H
 
@@ -6,32 +6,66 @@
 #include "Player.h"
 #include <vector>
 
-
 class Game
 {
-private:
-	//Print welcome message
-	void PrintWelcome();
-	//Print invalid message
-	void PrintInvalid();
-	//Prompt user to input
-	std::string UserPrompt();
-	//print menu
-	int Menu();
-	//start a new game with input player name
-	void NewGame();
-	//load file from director
-	bool LoadGame();
-	//vector to store player name
-	std::vector<Player> m_players;
-	//Show up author information
-	void ShowStudentInfo();
-	//print Goodbye and quit game
-	void Quit();
 public:
 	Game();
 	~Game();
+	//Æô¶¯ÓÎÏ·
 	void Start();
+private:
+	//ÔËĞĞÓÎÏ·
+	void RunGame();
+	//´òÓ¡»¶Ó­ĞÅÏ¢
+	void PrintWelcome();
+	//´òÓ¡ÓÃ»§ÊäÈëÎŞĞ§µÄÌáÊ¾ĞÅÏ¢
+	void PrintInvalid();
+	//´òÓ¡·ÖÊıĞÅÏ¢
+	void PrintScores();
+	//´òÓ¡ÆåÅÌÊı¾İ
+	void PrintBoard();
+	//±£´æÆåÅÌÊı¾İ
+	void SaveBoard(std::ofstream &os);
+	//ÌáÊ¾ÓÃ»§ÊäÈëÊı¾İ
+	std::string UserPrompt();
+	//ÏÔÊ¾ÓÎÏ·²Ëµ¥²¢»ñÈ¡ÓÃ»§Ñ¡Ôñ£¬·µ»ØÖµÎªÓÃ»§µÄÑ¡ÔñÏî
+	int Menu();
+	//¿ªÊ¼ĞÂµÄÓÎÏ·
+	void NewGame();
+	//¼ÓÔØ±£´æµÄÓÎÏ·£¬·µ»ØÖµ±íÊ¾ÊÇ·ñ¼ÓÔØ³É¹¦
+	bool LoadGame();
+	//ÏÔÊ¾×÷ÕßĞÅÏ¢
+	void ShowStudentInfo();
+	//´òÓ¡ÍË³öÓÎÏ·goodbye
+	void Quit();
+	//ÈÃÓÎÏ·ÔËĞĞÒ»¸ö»ØºÏ(ËùÓĞÍæ¼ÒÖ´ĞĞÒ»´Î²Ù×÷ÎªÒ»¸ö»ØºÏ)£¬·µ»ØÖµ±íÊ¾º¯ÊıÖ´ĞĞ×´Ì¬£¨STATUS_OKÕı³££¬STATUS_INVALIDÓÃ»§ÊäÈëÎŞĞ§£¬STATUS_CONTINE¼ÌĞø£¬STATUS_QUITÍË³ö£¬STATUS_TERMINATEÖÕÖ¹£©
+	int Round();
+	//Ï´ÅÆ
+	void Shuffle();
+	//ÓÎÏ·½áÊø£¬´òÓ¡Ë«·½µÃ·ÖĞÅÏ¢
+	void EndGame();
+	//½âÎöÍæ¼ÒÊäÈëµÄÃüÁî£¬²¢·µ»Øµ±Ç°ÓÎÏ·×´Ì¬
+	int ParseCmd(std::string cmd, Player &player);
+	//½«×Ö·û´®±íÊ¾µÄtile½âÎöÎªTileÀà£¬·µ»ØÖµ±íÊ¾½âÎöÊÇ·ñ³É¹¦
+	bool ParseTile(std::string strTile, Tile& tile);
+	//½«×Ö·û´®±íÊ¾µÄ×ø±ê½âÎöÎªÕûÊı×ø±êÖµ£¬·µ»ØÖµ±íÊ¾½âÎöÊÇ·ñ³É¹¦
+	bool ParsePlace(std::string strPlace, int& row, int& col);
+	//Íæ¼Ò·ÅÖÃÒ»¸ötileµ½ÆåÅÌÉÏ£¬rowºÍcol´ú±í·ÅÖÃµÄ×ø±ê£¬·µ»ØÖµ±íÊ¾º¯ÊıÖ´ĞĞ×´Ì¬
+	int PlaceTile(Player& player, Tile& tile, int row, int col);
+	//Íæ¼ÒÌæ»»ÊÖÉÏµÄÒ»¿étile£¬·ÅÈëbagÖĞ£¬²¢´Óbag¶¥¶Ë³éÈ¡Ò»¿éĞÂµÄtile£¬·µ»ØÖµ±íÊ¾º¯ÊıÖ´ĞĞ×´Ì¬
+	int ReplaceTile(Player& player, Tile& tile);
+	//µ±Ç°ÕıÔÚÖ´ĞĞ²Ù×÷µÄÍæ¼ÒµÄË÷ÒıÖµ
+	size_t m_nCurrentPlayer;
+private:
+	//ÓÃÓÚ±£´æÍæ¼ÒµÄvector
+	std::vector<Player> m_players;
+	//ÓÃÓÚ±£´æÆåÅÌµÄvector of vector
+	std::vector<std::vector<Tile>> m_board;
+	//ÓÃÓÚ±£´æbagµÄLinkedList
+	LinkedList m_bag;
+	//ÆåÅÌµÄ³ß´ç£¬ĞĞÊıºÍÁĞÊı
+	int m_nRows;
+	int m_nCols;
 };
 
 #endif
