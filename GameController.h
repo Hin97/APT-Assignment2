@@ -11,59 +11,59 @@ class Game
 public:
 	Game();
 	~Game();
-	//������Ϸ
+	//启动游戏
 	void Start();
 private:
-	//������Ϸ
+	//运行游戏
 	void RunGame();
-	//��ӡ��ӭ��Ϣ
+	//打印欢迎信息R
 	void PrintWelcome();
-	//��ӡ�û�������Ч����ʾ��Ϣ
+	//打印用户输入无效的提示信息R
 	void PrintInvalid();
-	//��ӡ������Ϣ
+	//打印分数信息
 	void PrintScores();
-	//��ӡ��������
+	//打印棋盘数据
 	void PrintBoard();
-	//������������
+	//保存棋盘数据
 	void SaveBoard(std::ofstream &os);
-	//��ʾ�û���������
+	//提示用户输入数据R
 	std::string UserPrompt();
-	//��ʾ��Ϸ�˵�����ȡ�û�ѡ�񣬷���ֵΪ�û���ѡ����
+	//显示游戏菜单并获取用户选择，返回值为用户的选择项R
 	int Menu();
-	//��ʼ�µ���Ϸ
+	//开始新的游戏R
 	void NewGame();
-	//���ر������Ϸ������ֵ��ʾ�Ƿ���سɹ�
+	//加载保存的游戏，返回值表示是否加载成功R
 	bool LoadGame();
-	//��ʾ������Ϣ
+	//显示作者信息R
 	void ShowStudentInfo();
-	//��ӡ�˳���Ϸgoodbye
+	//打印退出游戏goodbye 
 	void Quit();
-	//����Ϸ����һ���غ�(�������ִ��һ�β���Ϊһ���غ�)������ֵ��ʾ����ִ��״̬��STATUS_OK������STATUS_INVALID�û�������Ч��STATUS_CONTINE������STATUS_QUIT�˳���STATUS_TERMINATE��ֹ��
+	//让游戏运行一个回合(所有玩家执行一次操作为一个回合)，返回值表示函数执行状态（STATUS_OK正常，STATUS_INVALID用户输入无效，STATUS_CONTINE继续，STATUS_QUIT退出，STATUS_TERMINATE终止）
 	int Round();
-	//ϴ��
+	//洗牌
 	void Shuffle();
-	//��Ϸ��������ӡ˫���÷���Ϣ
+	//游戏结束，打印双方得分信息
 	void EndGame();
-	//��������������������ص�ǰ��Ϸ״̬
+	//解析玩家输入的命令，并返回当前游戏状态
 	int ParseCmd(std::string cmd, Player &player);
-	//���ַ�����ʾ��tile����ΪTile�࣬����ֵ��ʾ�����Ƿ�ɹ�
+	//将字符串表示的tile解析为Tile类，返回值表示解析是否成功
 	bool ParseTile(std::string strTile, Tile& tile);
-	//���ַ�����ʾ���������Ϊ��������ֵ������ֵ��ʾ�����Ƿ�ɹ�
+	//将字符串表示的坐标解析为整数坐标值，返回值表示解析是否成功
 	bool ParsePlace(std::string strPlace, int& row, int& col);
-	//��ҷ���һ��tile�������ϣ�row��col�������õ����꣬����ֵ��ʾ����ִ��״̬
+	//玩家放置一个tile到棋盘上，row和col代表放置的坐标，返回值表示函数执行状态
 	int PlaceTile(Player& player, Tile& tile, int row, int col);
-	//����滻���ϵ�һ��tile������bag�У�����bag���˳�ȡһ���µ�tile������ֵ��ʾ����ִ��״̬
+	//玩家替换手上的一块tile，放入bag中，并从bag顶端抽取一块新的tile，返回值表示函数执行状态
 	int ReplaceTile(Player& player, Tile& tile);
-	//��ǰ����ִ�в�������ҵ�����ֵ
+	//当前正在执行操作的玩家的索引值
 	size_t m_nCurrentPlayer;
 private:
-	//���ڱ�����ҵ�vector
+	//用于保存玩家的vector
 	std::vector<Player> m_players;
-	//���ڱ������̵�vector of vector
+	//用于保存棋盘的vector of vector
 	std::vector<std::vector<Tile>> m_board;
-	//���ڱ���bag��LinkedList
+	//用于保存bag的LinkedList
 	LinkedList m_bag;
-	//���̵ĳߴ磬����������
+	//棋盘的尺寸，行数和列数
 	int m_nRows;
 	int m_nCols;
 };
