@@ -27,6 +27,8 @@ public:
 	void Clear();
   //Print out the side of linklist
 	int size();
+ //Extract a node from linklist
+       Node* Extract(Colour colour, Shape shape); 
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
