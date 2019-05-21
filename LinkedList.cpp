@@ -117,6 +117,7 @@ void LinkedList::SaveContent(std::ofstream & os)
 		temp = temp->next;
 	}
 	os << std::endl;
+
 }
 
 void LinkedList::GetContent(std::vector<Tile>& tiles)
@@ -132,6 +133,4 @@ void LinkedList::GetContent(std::vector<Tile>& tiles)
 	}
 }
 
-LinkedList::~LinkedList() {
-}
 

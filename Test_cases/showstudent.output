@@ -7,12 +7,9 @@ Menu
 2. Load Game
 3. Show student information
 4. Quit
+5. Play with AI
 
-> 
-Invalid Input
-> 
-Invalid Input
-> 
+>
 ----------------------------------
 Name:Oscar
 Student ID:3562697
@@ -37,6 +34,7 @@ Menu
 2. Load Game
 3. Show student information
 4. Quit
+5. Play with AI
 
-> 
+>
 Goodbye
