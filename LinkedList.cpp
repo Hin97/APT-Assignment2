@@ -135,4 +135,3 @@ void LinkedList::GetContent(std::vector<Tile>& tiles)
 LinkedList::~LinkedList() {
 }
 
-
