@@ -156,7 +156,7 @@ void Game::NewGame()
 		}
 		m_players.push_back(player);
 	}
-	std::cout << "\nLet’s Play!\n" << std::endl;
+	std::cout << "\nLet鈥檚 Play!\n" << std::endl;
 	Shuffle();
 	for (int i = 0; i < 2; i++)
 	{
@@ -206,7 +206,7 @@ void Game::NewGameAI()
 		Player player; player.score = 0; player.name = "COMPUTER"; player.m_isAI = true;
 		m_players.push_back(player);
 	}
-	std::cout << "\nLet’s Play!\n" << std::endl;
+	std::cout << "\nLet鈥檚 Play!\n" << std::endl;
 	Shuffle();
 	for (int i = 0; i < 2; i++)
 	{
@@ -338,7 +338,7 @@ int Game::Round()
 		Player &p = m_players[m_nCurrentPlayer];
 		if (p.hand.size() == 0) return STATUS_TERMINATE;
 
-		std::cout << p.name << ", it’s your turn" << std::endl;
+		std::cout << p.name << ", it鈥檚 your turn" << std::endl;
 		PrintScores();
 		PrintBoard();
 		std::cout << "Your hand is" << std::endl;
@@ -503,8 +503,8 @@ void Game::Shuffle()
 		}
 	}
 	m_bag.Clear();
-	std::default_random_engine e;//定义随机数引擎
-	std::uniform_int_distribution<unsigned> id(0, 71);//整型分布
+	std::default_random_engine e;
+	std::uniform_int_distribution<unsigned> id(0, 71);
 	std::random_device device;
 	e.seed(device());
 	while (!pool.empty())
@@ -652,7 +652,7 @@ bool Game::PlaceCheck(int row, int col)
 {
 	Shape shape = m_board[row][col].shape;
 	Colour colour = m_board[row][col].colour;
-	//纵向检测
+	//vertical test
 	int type = -1;
 	if (row - 1 >= 0 && m_board[row - 1][col].shape)
 	{
@@ -684,7 +684,7 @@ bool Game::PlaceCheck(int row, int col)
 		}
 		if (count > 6) return false;
 	}
-	//横向检测
+	//horizontal test
 	type = -1;
 	if (col - 1 >= 0 && m_board[row][col - 1].shape)
 	{
