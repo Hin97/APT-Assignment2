@@ -1,4 +1,4 @@
-﻿
+
 #ifndef ASSIGN2_GAME_H
 #define ASSIGN2_GAME_H
 
@@ -9,6 +9,7 @@
 
 class Game
 {
+
 public:
 	Game();
 	~Game();
@@ -75,6 +76,7 @@ private:
 	//board size，row numbers and col numbers
 	int m_nRows;
 	int m_nCols;
+
 };
 
 #endif

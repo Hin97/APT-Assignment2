@@ -1,8 +1,11 @@
+
 #include "Game.h"
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <random>
+
 #include <algorithm>
 
 #define STATUS_OK			0
@@ -20,9 +23,12 @@ Game::Game()
 }
 
 
+
 Game::~Game()
 {
 }
+
+
 
 
 void Game::Start()
@@ -34,14 +40,18 @@ void Game::Start()
 		if (select == 1)
 		{
 			NewGame();
+
 			RunGame();
+
 			select = 0;
 		}
 		else if (select == 2)
 		{
 			if (LoadGame())
 			{
+
 				RunGame();
+
 				select = 0;
 			}
 			else
@@ -59,14 +69,17 @@ void Game::Start()
 			Quit();
 			select = 0;
 		}
+
 		else if (select == 5)
 		{
 			NewGameAI();
 			RunGame();
 			select = 0;
 		}
+
 	}
 }
+
 
 
 void Game::RunGame()
@@ -81,6 +94,7 @@ void Game::RunGame()
 }
 
 
+
 void Game::PrintWelcome()
 {
 	std::cout << "Welcome to Qwirkle!\n---------------------\n" << std::endl;
@@ -90,7 +104,9 @@ void Game::PrintWelcome()
 std::string Game::UserPrompt()
 {
 	std::cout << "> ";
+
 	std::string str; 
+
 	std::getline(std::cin, str);
 	std::cout << std::endl;
 	return str;
@@ -105,13 +121,17 @@ void Game::PrintInvalid()
 
 int Game::Menu()
 {
+
 	std::cout << "Menu\n----\n1. New Game\n2. Load Game\n3. Show student information\n4. Quit\n5. Play with AI\n" << std::endl;
+
 	int select = 0;
 	while (!select)
 	{
 		std::string num = UserPrompt();
 		select = atoi(num.c_str());
+
 		if (select < 1 || select>5)
+
 		{
 			PrintInvalid();
 			select = 0;
@@ -123,6 +143,7 @@ int Game::Menu()
 
 void Game::NewGame()
 {
+
 	for (int i = 0; i < m_nRows; i++)
 	{
 		std::vector<Tile> row;
@@ -133,6 +154,7 @@ void Game::NewGame()
 		}
 		m_board.push_back(row);
 	}
+
 	std::cout << "Starting a New Game\n" << std::endl;
 	for (int i = 0; i < 2; i++)
 	{
@@ -156,6 +178,7 @@ void Game::NewGame()
 		}
 		m_players.push_back(player);
 	}
+
 	std::cout << "\nLet’s Play!\n" << std::endl;
 	Shuffle();
 	for (int i = 0; i < 2; i++)
@@ -216,6 +239,7 @@ void Game::NewGameAI()
 }
 
 
+
 bool Game::LoadGame()
 {
 	std::cout << "Enter the filename from which load a game" << std::endl;
@@ -223,7 +247,9 @@ bool Game::LoadGame()
 
 	file.erase(0, file.find_first_not_of(" "));
 	file.erase(file.find_last_not_of(" ") + 1);
+
 	std::ifstream is; is.open(file);
+
 	if (!is)
 	{
 		std::cout << "Can not load the game!\n" << std::endl;
@@ -231,6 +257,7 @@ bool Game::LoadGame()
 	}
 	else
 	{
+
 		std::string line;
 		m_players.clear();
 		for (int i = 0; i < 2; i++)
@@ -294,6 +321,7 @@ bool Game::LoadGame()
 			if (m_players[i].name.compare(line) == 0)
 				m_nCurrentPlayer = i;
 		}
+
 		std::cout << "Qwirkle game successfully loaded\n" << std::endl;
 		return true;
 	}
@@ -329,6 +357,7 @@ void Game::Quit()
 {
 	std::cout << "Goodbye" << std::endl;
 }
+
 
 
 int Game::Round()
@@ -817,3 +846,4 @@ void Game::ExpandBoard(int direction)
 		m_nCols++;
 	}
 }
+
