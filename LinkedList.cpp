@@ -106,5 +106,17 @@ Node * LinkedList::Extract(Colour colour, Shape shape)
 	return nullptr;
 }
 
+void LinkedList::SaveContent(std::ofstream & os)
+{
+	Node* temp = head;
+	while (temp)
+	{
+		os << temp->tile->colour << temp->tile->shape;
+		if (temp->next) os << ',';
+		temp = temp->next;
+	}
+	os << std::endl;
+}
+
 LinkedList::~LinkedList() {
 }
