@@ -70,6 +70,21 @@ Node* LinkedList::Pop()
 	if (head) head = head->next;
 	temp->next = nullptr;
 	return temp;
+
+}
+
+
+
+int LinkedList::size()
+{
+	int count = 0;
+	Node* temp = head;
+	while (temp)
+	{
+		count++;
+		temp = temp->next;
+	}
+	return count;
 }
 
 Node * LinkedList::Extract(Colour colour, Shape shape)
@@ -92,15 +107,19 @@ Node * LinkedList::Extract(Colour colour, Shape shape)
 	return nullptr;
 }
 
-int LinkedList::size()
+void LinkedList::SaveContent(std::ofstream & os)
 {
-	int count = 0;
 	Node* temp = head;
 	while (temp)
 	{
-		count++;
+		os << temp->tile->colour << temp->tile->shape;
+		if (temp->next) os << ',';
 		temp = temp->next;
 	}
-	return count;
+	os << std::endl;
 }
+
+LinkedList::~LinkedList() {
+}
+
 
