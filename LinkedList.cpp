@@ -119,6 +119,19 @@ void LinkedList::SaveContent(std::ofstream & os)
 	os << std::endl;
 }
 
+void LinkedList::GetContent(std::vector<Tile>& tiles)
+{
+	Node* temp = head;
+	while (temp)
+	{
+		Tile tile; 
+		tile.colour = temp->tile->colour;
+		tile.shape = temp->tile->shape;
+		temp = temp->next; 
+		tiles.push_back(tile);
+	}
+}
+
 LinkedList::~LinkedList() {
 }
 
