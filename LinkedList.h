@@ -1,9 +1,10 @@
-
+﻿
 #ifndef ASSIGN2_LINKEDLIST_H
 #define ASSIGN2_LINKEDLIST_H
 
 #include "Node.h"
 #include <fstream>
+#include <vector>
 
 class LinkedList {
 public:
@@ -13,26 +14,24 @@ public:
 
 private:
    Node* head;
-
-
 public:
-  //Add a node to the back of the linklist
+	//向末尾增加一个节点
 	void AddTail(Colour colour, Shape shape);
 	void AddTail(Node* node);
-  //Show the head node of linklist
+	//弹出顶端的节点
 	Node* Pop();
-  //Print out the tile information of node
+	//从中间抽取一个Node
+	Node* Extract(Colour colour, Shape shape);
+	//打印所有节点的内容
 	void PrintContent();
-  //Clean out the linklist
+	//保存所有节点的数据
+	void SaveContent(std::ofstream &os);
+	//清空所有数据
 	void Clear();
-  //Print out the side of linklist
+	//返回节点数量
 	int size();
- //Extract a node from linklist
-       Node* Extract(Colour colour, Shape shape);
- //Save all node data
-      void SaveContent(std::ofstream &os);
- //Return save tile
-     void GetContent(std::vector<Tile>& tiles);
+	//返回保存tile向量
+	void GetContent(std::vector<Tile>& tiles);
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

@@ -1,13 +1,14 @@
-#include <iostream>
+
 #include "LinkedList.h"
+#include <iostream>
 
-LinkedList::LinkedList() {
+LinkedList::LinkedList() 
+{
    head = nullptr;
-
    // TODO
 }
 
-LinkedList::~LinkedList()
+LinkedList::~LinkedList() 
 {
 	Clear();
 }
@@ -58,34 +59,32 @@ void LinkedList::PrintContent()
 		std::cout << temp->tile->colour << temp->tile->shape;
 		if (temp->next) std::cout << ',';
 		temp = temp->next;
-	}
+	} 
 	std::cout << std::endl;
 }
 
+
+void LinkedList::SaveContent(std::ofstream & os)
+{
+	Node* temp = head;
+	while (temp)
+	{
+		os << temp->tile->colour << temp->tile->shape;
+		if (temp->next) os << ',';
+		temp = temp->next;
+	}
+	os << std::endl;
+}
 
 
 Node* LinkedList::Pop()
 {
 	Node* temp = head;
 	if (head) head = head->next;
-	temp->next = nullptr;
+	if (temp) temp->next = nullptr;
 	return temp;
-
 }
 
-
-
-int LinkedList::size()
-{
-	int count = 0;
-	Node* temp = head;
-	while (temp)
-	{
-		count++;
-		temp = temp->next;
-	}
-	return count;
-}
 
 Node * LinkedList::Extract(Colour colour, Shape shape)
 {
@@ -107,19 +106,29 @@ Node * LinkedList::Extract(Colour colour, Shape shape)
 	return nullptr;
 }
 
-void LinkedList::SaveContent(std::ofstream & os)
+
+int LinkedList::size()
+{
+	int count = 0;
+	Node* temp = head;
+	while (temp)
+	{
+		count++;
+		temp = temp->next;
+	}
+	return count;
+}
+
+
+void LinkedList::GetContent(std::vector<Tile>& tiles)
 {
 	Node* temp = head;
 	while (temp)
 	{
-		os << temp->tile->colour << temp->tile->shape;
-		if (temp->next) os << ',';
-		temp = temp->next;
+		Tile tile; 
+		tile.colour = temp->tile->colour;
+		tile.shape = temp->tile->shape;
+		temp = temp->next; 
+		tiles.push_back(tile);
 	}
-	os << std::endl;
 }
-
-LinkedList::~LinkedList() {
-}
-
-

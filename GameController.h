@@ -24,11 +24,11 @@ private:
 	void PrintInvalid();//Jason
 	//Print score info
 	void PrintScores();//Oscar
-	//Print broad 
+	//Print broad
 	void PrintBoard();//Jack
 	//Save board info
 	void SaveBoard(std::ofstream& os);//Jack
-	//Prompt user input message 
+	//Prompt user input message
 	std::string UserPrompt();//Jason
 	//print menu
 	int Menu();//Jason
@@ -47,7 +47,7 @@ private:
 	//show student info
 	void ShowStudentInfo();//Jack
 	//print goodbye after quit
-	void Quit();//Jason
+	int Quit();//Jason
 	//Let the game run for a round（All players perform an operation for one round），The return value indicates the function execution status （STATUS_OK，STATUS_INVALID，STATUS_CONTINE，STATUS_QUIT，STATUS_TERMINA）
 	int Round();//Cryil
 	//Shuffle
@@ -64,9 +64,6 @@ private:
 	int PlaceTile(Player& player, Tile& tile, int row, int col);//Oscar
 	//The player replaces a tile on the hand, puts it in the bag, and extracts a new tile from the top of the bag. The return value indicates the function execution status.
 	int ReplaceTile(Player& player, Tile& tile);//Oscar
-	//The index value of the currently executing player
-	size_t m_nCurrentPlayer;//Oscar
-private:
 	//use to save player's vector
 	std::vector<Player> m_players;//Oscar
 	//use to save board's vector of vector
@@ -76,7 +73,8 @@ private:
 	//board size，row numbers and col numbers
 	int m_nRows;
 	int m_nCols;
-
+	//The index value of the currently executing player
+	size_t m_nCurrentPlayer;//Oscar
 };
 
 #endif

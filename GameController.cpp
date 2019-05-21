@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "GameController.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -668,24 +668,34 @@ bool Game::PlaceCheck(int row, int col)
 {
 	Shape shape = m_board[row][col].shape;
 	Colour colour = m_board[row][col].colour;
-	//��������
 	int type = -1;
+
+	//type = 0 when above have tile but not same color
 	if (row - 1 >= 0 && m_board[row - 1][col].shape)
 	{
 		type = 0;
+	//type = 1 when above tile has same color
 		if (colour == m_board[row - 1][col].colour) type = 1;
 	}
+	//type = 0 when below have tile
 	else if (row + 1 < m_nRows && m_board[row + 1][col].shape)
 	{
 		type = 0;
+	//type = 1 when below have same colour
 		if (colour == m_board[row + 1][col].colour) type = 1;
 	}
+
 	if (type != -1)
 	{
+		//Down to top
 		int i = row - 1, count = 1;
 		while (i >= 0 && m_board[i][col].shape)
 		{
+			//First or means shape the same and color different with above one, but if same color happen again though out the line above the above one, then return false
+			//Second or means if above have shape with different color and their shape is defferet as well, return false
 			if ((m_board[i][col].colour == colour || m_board[i][col].shape != shape) && type == 0) return false;
+			//Third ir means same color with above one with different shape, but if different color and same shape happen though out the above line, then return false
+      //Forth or means if above has same shape and same color then return false
 			if ((m_board[i][col].colour != colour || m_board[i][col].shape == shape) && type == 1) return false;
 			count++;
 			i--;
@@ -700,7 +710,7 @@ bool Game::PlaceCheck(int row, int col)
 		}
 		if (count > 6) return false;
 	}
-	//��������
+
 	type = -1;
 	if (col - 1 >= 0 && m_board[row][col - 1].shape)
 	{
