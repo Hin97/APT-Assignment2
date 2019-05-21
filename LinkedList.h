@@ -13,7 +13,7 @@ public:
 
 private:
    Node* head;
-};
+
 
 public:
   //Add a node to the back of the linklist
@@ -21,6 +21,8 @@ public:
 	void AddTail(Node* node);
   //Show the head node of linklist
 	Node* Pop();
+ //
+	Node* Extract(Colour colour, Shape shape);
   //Print out the tile information of node
 	void PrintContent();
   //Clean out the linklist

@@ -1,0 +1,42 @@
+Welcome to Qwirkle!
+---------------------
+
+Menu
+----
+1. New Game
+2. Load Game
+3. Show student information
+4. Quit
+
+> 
+Invalid Input
+> 
+Invalid Input
+> 
+----------------------------------
+Name:Oscar
+Student ID:3562697
+Email:s3562697@student.rmit.edu.au
+
+Name:Jack
+Student ID:3661033
+Email:s3661033@student.rmit.edu.au
+
+Name:Cryil
+Student ID:3579811
+Email:s3579811@student.rmit.edu.au
+
+Name:Jason
+Student ID:3566690
+Email:s3566690@student.rmit.edu.au
+----------------------------------
+
+Menu
+----
+1. New Game
+2. Load Game
+3. Show student information
+4. Quit
+
+> 
+Goodbye
