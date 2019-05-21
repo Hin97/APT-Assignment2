@@ -45,6 +45,8 @@ public:
 	int size();
  //Extract a node from linklist
        Node* Extract(Colour colour, Shape shape); 
+ //Save all node data
+      void SaveContent(std::ofstream &os);
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
