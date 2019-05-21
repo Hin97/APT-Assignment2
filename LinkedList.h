@@ -31,6 +31,8 @@ public:
        Node* Extract(Colour colour, Shape shape);
  //Save all node data
       void SaveContent(std::ofstream &os);
+ //Return save tile
+     void GetContent(std::vector<Tile>& tiles);
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
