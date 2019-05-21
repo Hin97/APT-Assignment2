@@ -1,11 +1,8 @@
-
 #include "Game.h"
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <random>
-
 #include <algorithm>
 
 #define STATUS_OK			0
@@ -19,16 +16,13 @@ Game::Game()
 	, m_nCols(6)
 	, m_nCurrentPlayer(0)
 {
-	
-}
 
+}
 
 
 Game::~Game()
 {
 }
-
-
 
 
 void Game::Start()
@@ -40,18 +34,14 @@ void Game::Start()
 		if (select == 1)
 		{
 			NewGame();
-
 			RunGame();
-
 			select = 0;
 		}
 		else if (select == 2)
 		{
 			if (LoadGame())
 			{
-
 				RunGame();
-
 				select = 0;
 			}
 			else
@@ -69,17 +59,14 @@ void Game::Start()
 			Quit();
 			select = 0;
 		}
-
 		else if (select == 5)
 		{
 			NewGameAI();
 			RunGame();
 			select = 0;
 		}
-
 	}
 }
-
 
 
 void Game::RunGame()
@@ -94,7 +81,6 @@ void Game::RunGame()
 }
 
 
-
 void Game::PrintWelcome()
 {
 	std::cout << "Welcome to Qwirkle!\n---------------------\n" << std::endl;
@@ -104,9 +90,7 @@ void Game::PrintWelcome()
 std::string Game::UserPrompt()
 {
 	std::cout << "> ";
-
-	std::string str; 
-
+	std::string str;
 	std::getline(std::cin, str);
 	std::cout << std::endl;
 	return str;
@@ -121,9 +105,7 @@ void Game::PrintInvalid()
 
 int Game::Menu()
 {
-
 	std::cout << "Menu\n----\n1. New Game\n2. Load Game\n3. Show student information\n4. Quit\n5. Play with AI\n" << std::endl;
-
 	int select = 0;
 	while (!select)
 	{
@@ -131,8 +113,11 @@ int Game::Menu()
 		select = atoi(num.c_str());
 
 		if (select < 1 || select>5)
-
 		{
+			if (num.compare("^D") == 0 ) {
+      int status = STATUS_TERMINATE;
+			return status;
+		}
 			PrintInvalid();
 			select = 0;
 		}
@@ -143,7 +128,6 @@ int Game::Menu()
 
 void Game::NewGame()
 {
-
 	for (int i = 0; i < m_nRows; i++)
 	{
 		std::vector<Tile> row;
@@ -154,7 +138,6 @@ void Game::NewGame()
 		}
 		m_board.push_back(row);
 	}
-
 	std::cout << "Starting a New Game\n" << std::endl;
 	for (int i = 0; i < 2; i++)
 	{
@@ -165,6 +148,10 @@ void Game::NewGame()
 			legal = true;
 			std::cout << "Enter a name for player " << i + 1 << " (uppercase characters only)" << std::endl;
 			player.name = UserPrompt();
+			if (player.name.compare("^D") == 0) {
+				Quit();
+				return;
+			}
 			if (player.name.empty()) legal = false;
 			else
 			{
@@ -175,11 +162,11 @@ void Game::NewGame()
 				}
 			}
 			if (!legal) PrintInvalid();
+
 		}
 		m_players.push_back(player);
 	}
-
-	std::cout << "\nLet’s Play!\n" << std::endl;
+	std::cout << "\nLet's Play!\n" << std::endl;
 	Shuffle();
 	for (int i = 0; i < 2; i++)
 	{
@@ -211,6 +198,10 @@ void Game::NewGameAI()
 			legal = true;
 			std::cout << "Enter your name(uppercase characters only)" << std::endl;
 			player.name = UserPrompt();
+			if (player.name.compare("^D") == 0) {
+				Quit();
+				return;
+			}
 			if (player.name.empty()) legal = false;
 			else
 			{
@@ -229,7 +220,7 @@ void Game::NewGameAI()
 		Player player; player.score = 0; player.name = "COMPUTER"; player.m_isAI = true;
 		m_players.push_back(player);
 	}
-	std::cout << "\nLet’s Play!\n" << std::endl;
+	std::cout << "\nLet's Play!\n" << std::endl;
 	Shuffle();
 	for (int i = 0; i < 2; i++)
 	{
@@ -239,7 +230,6 @@ void Game::NewGameAI()
 }
 
 
-
 bool Game::LoadGame()
 {
 	std::cout << "Enter the filename from which load a game" << std::endl;
@@ -247,9 +237,7 @@ bool Game::LoadGame()
 
 	file.erase(0, file.find_first_not_of(" "));
 	file.erase(file.find_last_not_of(" ") + 1);
-
 	std::ifstream is; is.open(file);
-
 	if (!is)
 	{
 		std::cout << "Can not load the game!\n" << std::endl;
@@ -257,7 +245,6 @@ bool Game::LoadGame()
 	}
 	else
 	{
-
 		std::string line;
 		m_players.clear();
 		for (int i = 0; i < 2; i++)
@@ -277,7 +264,7 @@ bool Game::LoadGame()
 				left += 3;
 			}
 		}
-		std::getline(is, line); std::getline(is, line); 
+		std::getline(is, line); std::getline(is, line);
 		bool reading_board = true;
 		int i = 0;
 		while (reading_board)
@@ -321,7 +308,6 @@ bool Game::LoadGame()
 			if (m_players[i].name.compare(line) == 0)
 				m_nCurrentPlayer = i;
 		}
-
 		std::cout << "Qwirkle game successfully loaded\n" << std::endl;
 		return true;
 	}
@@ -353,11 +339,12 @@ void Game::ShowStudentInfo()
 }
 
 
-void Game::Quit()
+int Game::Quit()
 {
 	std::cout << "Goodbye" << std::endl;
+  int status = STATUS_TERMINATE;
+	return status;
 }
-
 
 
 int Game::Round()
@@ -367,7 +354,7 @@ int Game::Round()
 		Player &p = m_players[m_nCurrentPlayer];
 		if (p.hand.size() == 0) return STATUS_TERMINATE;
 
-		std::cout << p.name << ", it’s your turn" << std::endl;
+		std::cout << p.name << ", it's your turn" << std::endl;
 		PrintScores();
 		PrintBoard();
 		std::cout << "Your hand is" << std::endl;
@@ -379,7 +366,7 @@ int Game::Round()
 			std::vector<Tile> tiles; p.hand.GetContent(tiles);
 			Tile tileChoose = tiles[0];
 			int scoreMax = 0, row = 0, col = 0;
-			for (int t = 0; t < tiles.size(); t++)
+			for (unsigned int t = 0; t < tiles.size(); t++)
 			{
 				for (int i = 0; i < m_nRows; i++)
 				{
@@ -449,7 +436,7 @@ void Game::PrintScores()
 void Game::PrintBoard()
 {
 	std::cout << "   ";
-	for (size_t i = 0; i < m_nCols; i++)
+	for (int i = 0; i < m_nCols; i++)
 	{
 		if (i < 10)
 			std::cout << i << "  ";
@@ -457,7 +444,7 @@ void Game::PrintBoard()
 			std::cout << i << " ";
 	}
 	std::cout << std::endl;
-	for (size_t i = 0; i < m_nCols + 1; i++)
+	for (int i = 0; i < m_nCols + 1; i++)
 	{
 		std::cout << "---";
 	}
@@ -524,7 +511,7 @@ void Game::Shuffle()
 	{
 		for (int j = 0; j < 6; j++)
 		{
-			Tile tile; 
+			Tile tile;
 			tile.colour = colour[i];
 			tile.shape = j + 1;
 			pool.push_back(tile);
@@ -532,8 +519,8 @@ void Game::Shuffle()
 		}
 	}
 	m_bag.Clear();
-	std::default_random_engine e;
-	std::uniform_int_distribution<unsigned> id(0, 71);
+	std::default_random_engine e;//��������������
+	std::uniform_int_distribution<unsigned> id(0, 71);//���ͷֲ�
 	std::random_device device;
 	e.seed(device());
 	while (!pool.empty())
@@ -681,7 +668,7 @@ bool Game::PlaceCheck(int row, int col)
 {
 	Shape shape = m_board[row][col].shape;
 	Colour colour = m_board[row][col].colour;
-	//vertical test
+	//��������
 	int type = -1;
 	if (row - 1 >= 0 && m_board[row - 1][col].shape)
 	{
@@ -713,7 +700,7 @@ bool Game::PlaceCheck(int row, int col)
 		}
 		if (count > 6) return false;
 	}
-	//horizontal test
+	//��������
 	type = -1;
 	if (col - 1 >= 0 && m_board[row][col - 1].shape)
 	{
@@ -846,4 +833,3 @@ void Game::ExpandBoard(int direction)
 		m_nCols++;
 	}
 }
-
