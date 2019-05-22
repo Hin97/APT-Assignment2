@@ -7,9 +7,8 @@
 
 #define STATUS_OK			0
 #define STATUS_INVALID		1
-#define STATUS_CONTINE		2
-#define STATUS_QUIT			3
-#define STATUS_TERMINATE	4
+#define STATUS_QUIT			2
+#define STATUS_TERMINATE	3
 
 Game::Game()
 	: m_nRows(6)
@@ -589,7 +588,7 @@ int Game::ParseCmd(std::string cmd, Player &player)
 		os << player.name << std::endl;
 		os.close();
 		std::cout << "Game successfully saved\n" << std::endl;
-		return STATUS_CONTINE;
+		return STATUS_OK;
 	}
 	return STATUS_INVALID;
 }
