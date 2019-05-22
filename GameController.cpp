@@ -552,7 +552,7 @@ void Game::EndGame()
 
 int Game::ParseCmd(std::string cmd, Player &player)
 {
-	if (cmd.compare("^D") == 0 || cmd.compare("\x4") == 0) return STATUS_QUIT;
+	if (cmd.compare("^D") == 0 ) return STATUS_QUIT;
 	int index = cmd.find(' ');
 	if (cmd.find("place ") == 0)
 	{
