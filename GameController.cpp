@@ -115,7 +115,7 @@ int Game::Menu()
 		if (select < 1 || select>5)
 		{
 			if (num.compare("^D") == 0 ) {
-      int status = STATUS_TERMINATE;
+      int status = STATUS_QUIT;
 			return status;
 		}
 			PrintInvalid();
@@ -342,7 +342,7 @@ void Game::ShowStudentInfo()
 int Game::Quit()
 {
 	std::cout << "Goodbye" << std::endl;
-  int status = STATUS_TERMINATE;
+  int status = STATUS_QUIT;
 	return status;
 }
 
