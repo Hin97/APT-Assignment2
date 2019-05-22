@@ -173,7 +173,7 @@ void Game::NewGame()
 		m_players[i].Drawn(&m_bag, 6);
 	}
 }
-
+//Gao,Player name
 
 void Game::NewGameAI()
 {
@@ -227,7 +227,7 @@ void Game::NewGameAI()
 		m_players[i].Drawn(&m_bag, 6);
 	}
 }
-
+// Gao, Create AI base on rule
 
 bool Game::LoadGame()
 {
@@ -430,6 +430,7 @@ void Game::PrintScores()
 		std::cout << "Score for " << m_players[i].name << ": " << m_players[i].score << std::endl;
 	}
 }
+//Gao, display score
 
 
 void Game::PrintBoard()
@@ -633,6 +634,7 @@ int Game::ReplaceTile(Player & player, Tile & tile)
 		return STATUS_OK;
 	}
 }
+//Gao, change the tile from pBag
 
 
 int Game::PlaceTile(Player& player, Tile& tile, int row, int col)
@@ -661,6 +663,7 @@ int Game::PlaceTile(Player& player, Tile& tile, int row, int col)
 		return STATUS_OK;
 	}
 }
+//place tile on borad,Gao
 
 
 bool Game::PlaceCheck(int row, int col)
