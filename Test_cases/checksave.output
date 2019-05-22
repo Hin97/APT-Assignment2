@@ -1,0 +1,44 @@
+Welcome to Qwirkle!
+---------------------
+
+Menu
+----
+1. New Game
+2. Load Game
+3. Show student information
+4. Quit
+5. Play with AI
+
+>
+Enter the filename from which load a game
+>
+Qwirkle game successfully loaded
+
+F, it's your turn
+Score for G: 241
+Score for F: 173
+   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+------------------------------------------------
+A |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+B |  |B1|Y1|G1|O1|R1|P1|  |  |  |  |  |  |  |  |
+C |  |B2|Y2|G2|O2|R2|P2|  |  |  |  |  |  |  |  |
+D |  |B3|Y3|G3|O3|R3|P3|  |  |  |  |  |  |  |  |
+E |  |B4|Y4|G4|O4|R4|P4|  |  |  |  |  |  |  |  |
+F |  |B5|Y5|G5|O5|R5|P5|  |  |  |  |  |  |  |  |
+G |  |B6|Y6|G6|O6|R6|P6|  |  |  |  |  |  |  |  |
+H |  |  |  |  |  |  |  |  |O1|G1|P1|R1|Y1|B1|  |
+I |  |  |  |  |  |  |  |  |O2|G2|P2|R2|Y2|B2|  |
+J |  |  |  |  |  |  |  |  |O3|G3|P3|R3|Y3|  |  |
+K |  |  |  |  |  |  |  |  |O4|G4|P4|R4|Y4|  |  |
+L |  |  |  |  |  |  |  |  |  |G5|  |R5|Y5|  |  |
+M |  |  |  |  |  |  |  |  |O6|G6|P6|R6|Y6|B6|  |
+N |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+B5,O5,B4
+
+>
+Game successfully saved
+
+>
+Goodbye

@@ -519,8 +519,8 @@ void Game::Shuffle()
 		}
 	}
 	m_bag.Clear();
-	std::default_random_engine e;//��������������
-	std::uniform_int_distribution<unsigned> id(0, 71);//���ͷֲ�
+	std::default_random_engine e;
+	std::uniform_int_distribution<unsigned> id(0, 71);
 	std::random_device device;
 	e.seed(device());
 	while (!pool.empty())
